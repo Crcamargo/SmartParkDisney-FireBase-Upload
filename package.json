@@ -4,13 +4,14 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "start": "node your-script.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Crcamargo/SmartParkDisneyUpload.git"
   },
-  "author": "Cristian Camargo",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Crcamargo/SmartParkDisneyUpload/issues"
