@@ -18,16 +18,13 @@ var database = firebase.database();
 console.log("Initializing DB");
 disneyland.GetWaitTimes().then(function(rides) {
     for(var i=0, ride; ride=rides[i++];) {
-
         var fp = ride.fastPassReturnTime;
         if(fp != undefined ){
-            fp = ride.fastPassReturnTime.startTime + ";" + ride.fastPassReturnTime.endTime;
-        }
-        else{
+            fp = ride.fastPassReturnTime.startTime + ";" +
+                 ride.fastPassReturnTime.endTime;
+        }else{
             fp = "null"
         }
-       console.log(ride.name + " : " + fp);
-
         database.ref(ride.id).set({
             name: ride.name,
             time: 0,
@@ -78,11 +75,19 @@ setInterval(function(){
 
     disneyland.GetWaitTimes().then(function(rides) {
     for(var i=0, ride; ride=rides[i++];) {
+        var fp = ride.fastPassReturnTime;
+        if(fp != undefined ){
+            fp = ride.fastPassReturnTime.startTime + ";" +
+                 ride.fastPassReturnTime.endTime;
+        }else{
+            fp = "null"
+        }
         database.ref(ride.id).set({
             name: ride.name,
             time: ride.waitTime,
             active: ride.active,
             fastPass: ride.fastPass,
+            fastPassReturn: fp,
             status: ride.status
         })
         //console.log(ride.name + ": " + ride.waitTime + " minutes wait");
