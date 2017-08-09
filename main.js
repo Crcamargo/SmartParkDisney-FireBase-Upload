@@ -23,6 +23,8 @@ disneyland.GetWaitTimes().then(function(rides) {
         if(fp != undefined ){
             fp = ride.fastPassReturnTime.startTime + ";" + ride.fastPassReturnTime.endTime;
         }
+       console.log(ride.name + " : " + fp);
+
         database.ref(ride.id).set({
             name: ride.name,
             time: 0,
