@@ -23,6 +23,7 @@ disneyland.GetWaitTimes().then(function(rides) {
             time: 0,
             active: ride.active,
             fastPass: ride.fastPass,
+            fastPassReturn: ride.fastPassReturnTime,
             status: ride.status
         })
         //console.log(ride.name + ": " + ride.waitTime + " minutes wait");
@@ -64,7 +65,7 @@ setInterval(function(){
             }
         }
     }, console.error);
-        
+
     disneyland.GetWaitTimes().then(function(rides) {
     for(var i=0, ride; ride=rides[i++];) {
         database.ref(ride.id).set({
