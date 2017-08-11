@@ -25,7 +25,7 @@ disneyland.GetWaitTimes().then(function(rides) {
         }else{
             fp = "null"
         }
-        database.ref(ride.id).set({
+        database.ref(ride.id).update({
             name: ride.name,
             time: 0,
             active: ride.active,
@@ -42,7 +42,7 @@ disneyland.GetWaitTimes().then(function(rides) {
 disneyland.GetOpeningTimes().then(function(times) {
     for(var i=0, time; time=times[i++];) {
         if (time.type == "Operating") {
-            database.ref("parkValues").set({
+            database.ref("parkValues").update({
                 time: disneyland.TimeNow(),
                 date: disneyland.DateNow(),
                 openingTime: time.openingTime,
@@ -61,7 +61,7 @@ setInterval(function(){
     disneyland.GetOpeningTimes().then(function(times) {
         for(var i=0, time; time=times[i++];) {
             if (time.type == "Operating") {
-                database.ref("parkValues").set({
+                database.ref("parkValues").update({
                     time: disneyland.TimeNow(),
                     date: disneyland.DateNow(),
                     openingTime: time.openingTime,
@@ -82,7 +82,7 @@ setInterval(function(){
         }else{
             fp = "null"
         }
-        database.ref(ride.id).set({
+        database.ref(ride.id).update({
             name: ride.name,
             time: ride.waitTime,
             active: ride.active,
