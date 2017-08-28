@@ -14,12 +14,16 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-// Get admin key and sign in
-var adminId = process.env.ADMIN_KEY;
-firebase.auth().signInWithCustomToken(adminId).catch(function(error) {
-    var errorCode = error.code;
-    var errorMessage = error.message;
+// Sign in Anonymously
+firebase.auth().signInAnonymously().catch(function(error) {
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  console.log(errorMessage + " " + errorCode);
+
 });
+// Set uid to Admin Key
+var user = firebase.auth().currentUser;
+user.uid = process.env.ADMIN_KEY;
 
 // Pull data from Themeparks and upload to firebase every minute
 var minutes = 1, the_interval = minutes * 60  * 1000;
