@@ -15,6 +15,9 @@ firebase.initializeApp(config);
 var disneyland = new Themeparks.Parks.DisneylandResortMagicKingdom();
 var database = firebase.database();
 
+var adminId = process.env.ADMIN_KEY;
+console.log("Key : " + adminId);
+
 console.log("Initializing DB");
 disneyland.GetWaitTimes().then(function(rides) {
     for(var i=0, ride; ride=rides[i++];) {
