@@ -21,9 +21,18 @@ firebase.auth().signInAnonymously().catch(function(error) {
   console.log(errorMessage + " " + errorCode);
 
 });
-// Set uid to Admin Key
-var user = firebase.auth().currentUser;
-user.uid = process.env.ADMIN_KEY;
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    user.uid = process.env.ADMIN_KEY;
+    // ...
+  } else {
+    // User is signed out.
+    // ...
+  }
+  // ...
+});
 
 // Pull data from Themeparks and upload to firebase every minute
 var minutes = 1, the_interval = minutes * 60  * 1000;
