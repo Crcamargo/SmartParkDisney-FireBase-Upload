@@ -14,24 +14,13 @@ var config = {
 firebase.initializeApp(config);
 var database = firebase.database();
 
-// Sign in Anonymously
-firebase.auth().signInAnonymously().catch(function(error) {
+// Sign in with Admin Account
+var email = process.env.adminEmail;
+var password = process.env.adminPassword;
+firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
   var errorCode = error.code;
   var errorMessage = error.message;
-  console.log(errorMessage + " " + errorCode);
-
-});
-
-firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    // User is signed in.
-    user.uid = process.env.ADMIN_KEY;
-    // ...
-  } else {
-    // User is signed out.
-    // ...
-  }
-  // ...
+  console.log(errorMessage);
 });
 
 // Pull data from Themeparks and upload to firebase every minute
