@@ -53,7 +53,7 @@ setInterval(function(){
         }else{
             fp = "null"
         }
-        database.ref(ride.id).update({
+        database.ref("Rides").ref(ride.id).update({
             name: ride.name,
             time: ride.waitTime,
             active: ride.active,
