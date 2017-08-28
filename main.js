@@ -17,9 +17,11 @@ var database = firebase.database();
 // Sign in with Admin Account
 var email = process.env.adminEmail;
 var password = process.env.adminPassword;
+
 firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
   var errorCode = error.code;
   var errorMessage = error.message;
+  console.log("Email: " + email + " Password: " + password );
   console.log(errorMessage);
 });
 
