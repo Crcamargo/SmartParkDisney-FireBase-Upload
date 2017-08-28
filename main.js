@@ -1,5 +1,6 @@
 var firebase = require("firebase");
 var Themeparks = require("themeparks");
+var disneyland = new Themeparks.Parks.DisneylandResortMagicKingdom();
 
 // Initialize Firebase
 var config = {
@@ -11,56 +12,21 @@ var config = {
     messagingSenderId: "935643963162"
 };
 firebase.initializeApp(config);
-
-var disneyland = new Themeparks.Parks.DisneylandResortMagicKingdom();
 var database = firebase.database();
 
+// Get admin key and sign in
 var adminId = process.env.ADMIN_KEY;
-console.log("Key : " + adminId);
+firebase.auth().signInWithCustomToken(adminId).catch(function(error) {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+});
 
-console.log("Initializing DB");
-disneyland.GetWaitTimes().then(function(rides) {
-    for(var i=0, ride; ride=rides[i++];) {
-        var fp = ride.fastPassReturnTime;
-        if(fp != undefined ){
-            fp = ride.fastPassReturnTime.startTime + ";" +
-                 ride.fastPassReturnTime.endTime;
-        }else{
-            fp = "null"
-        }
-        database.ref(ride.id).update({
-            name: ride.name,
-            time: 0,
-            active: ride.active,
-            fastPass: ride.fastPass,
-            fastPassReturn: fp,
-            status: ride.status
-        })
-        //console.log(ride.name + ": " + ride.waitTime + " minutes wait");
-    }
-}, console.error);
-
-
-// get park opening times
-disneyland.GetOpeningTimes().then(function(times) {
-    for(var i=0, time; time=times[i++];) {
-        if (time.type == "Operating") {
-            database.ref("parkValues").update({
-                time: disneyland.TimeNow(),
-                date: disneyland.DateNow(),
-                openingTime: time.openingTime,
-                closingTime: time.closingTime
-            })
-            //console.log("[" + time.date + "] Open from " + time.openingTime + " until " + time.closingTime);
-            break;
-        }
-    }
-}, console.error);
-
-
+// Pull data from Themeparks and upload to firebase every minute
 var minutes = 1, the_interval = minutes * 60  * 1000;
 setInterval(function(){
     console.log("Syncing");
+
+    // Get Park date, time, and hours of operation
     disneyland.GetOpeningTimes().then(function(times) {
         for(var i=0, time; time=times[i++];) {
             if (time.type == "Operating") {
@@ -70,12 +36,12 @@ setInterval(function(){
                     openingTime: time.openingTime,
                     closingTime: time.closingTime
                 })
-                //console.log("[" + time.date + "] Open from " + time.openingTime + " until " + time.closingTime);
                 break;
             }
         }
     }, console.error);
 
+    // Get wait times, ride status, and fastpass info for every ride
     disneyland.GetWaitTimes().then(function(rides) {
     for(var i=0, ride; ride=rides[i++];) {
         var fp = ride.fastPassReturnTime;
@@ -93,7 +59,6 @@ setInterval(function(){
             fastPassReturn: fp,
             status: ride.status
         })
-        //console.log(ride.name + ": " + ride.waitTime + " minutes wait");
     }
     }, console.error);
 }, the_interval);
